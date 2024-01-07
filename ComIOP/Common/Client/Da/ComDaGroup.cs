@@ -956,7 +956,7 @@ namespace Opc.Ua.Com.Client
                         Marshal.DestroyStructure(pos, typeof(OpcRcw.Da.OPCITEMRESULT));
                     }
 
-                    pos = (IntPtr)(pos.ToInt32() + Marshal.SizeOf(typeof(OpcRcw.Da.OPCITEMRESULT)));
+                    pos = (IntPtr)(pos.ToInt64() + Marshal.SizeOf(typeof(OpcRcw.Da.OPCITEMRESULT)));
                 }
 
                 if (deallocate)
@@ -999,7 +999,7 @@ namespace Opc.Ua.Com.Client
                         Marshal.DestroyStructure(pos, typeof(OpcRcw.Da.OPCITEMSTATE));
                     }
 
-                    pos = (IntPtr)(pos.ToInt32() + Marshal.SizeOf(typeof(OpcRcw.Da.OPCITEMSTATE)));
+                    pos = (IntPtr)(pos.ToInt64() + Marshal.SizeOf(typeof(OpcRcw.Da.OPCITEMSTATE)));
                 }
 
                 if (deallocate)
