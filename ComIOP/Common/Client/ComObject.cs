@@ -119,7 +119,10 @@ namespace Opc.Ua.Com.Client
         public object Unknown
         {
             get { return m_unknown; }
-            set { m_unknown = value; }
+            set {
+                Utils.Trace("ComObjectCreated: {0:X} {1}", value, m_id);
+                m_unknown = value;
+            }
         }
         #endregion
 
@@ -131,6 +134,7 @@ namespace Opc.Ua.Com.Client
         {
             lock (m_lock)
             {
+                Utils.Trace("ComObject [id:{0} {1}] released", m_id, m_unknown);
                 ComUtils.ReleaseServer(m_unknown);
                 m_unknown = null;
             }
@@ -158,7 +162,7 @@ namespace Opc.Ua.Com.Client
         /// <returns></returns>
         protected T BeginComCall<T>(string methodName, bool throwOnError) where T : class
         {
-            Utils.Trace(Utils.TraceMasks.ExternalSystem, "{0} called.", methodName);
+            Utils.Trace(Utils.TraceMasks.ExternalSystem, "{0} called. on: [id: {1}, {2}]", methodName, m_id, m_unknown);
 
             lock (m_lock)
             {
@@ -221,6 +225,7 @@ namespace Opc.Ua.Com.Client
         private int m_outstandingCalls;
         private bool m_disposed;
         private object m_unknown;
+        private Guid m_id = Guid.NewGuid();
         #endregion
     }
 }
