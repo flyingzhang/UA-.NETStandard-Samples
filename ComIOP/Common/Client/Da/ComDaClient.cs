@@ -75,7 +75,7 @@ namespace Opc.Ua.Com.Client
 
             lock (m_cache)
             {
-                if (m_cache.TryGetValue(itemId, out element))
+                if (m_cache.TryGetValue(itemId, out element) && element.ItemId != null )
                 {
                     return element;
                 }
@@ -102,6 +102,10 @@ namespace Opc.Ua.Com.Client
             {
                 SaveElementInCache(element);
             }
+            else
+            {
+                SaveElementInCache(new DaElement());
+            }
 
             return element;
         }
@@ -124,7 +128,7 @@ namespace Opc.Ua.Com.Client
 
             lock (m_cache)
             {
-                if (m_cache.TryGetValue(itemId, out element))
+                if (m_cache.TryGetValue(itemId, out element) && element.ItemId != null)
                 {
                     if (element.Properties != null)
                     {
@@ -185,7 +189,7 @@ namespace Opc.Ua.Com.Client
 
             lock (m_cache)
             {
-                if (m_cache.TryGetValue(itemId, out element))
+                if (m_cache.TryGetValue(itemId, out element) && element.ItemId != null)
                 {
                     if (element.ParentId != null)
                     {
@@ -518,7 +522,7 @@ namespace Opc.Ua.Com.Client
                     {
                         DaElement element = null;
 
-                        if (m_cache.TryGetValue(itemId, out element))
+                        if (m_cache.TryGetValue(itemId, out element) && element.ItemId != null)
                         {
                             element.Properties = array;
                         }
@@ -662,7 +666,7 @@ namespace Opc.Ua.Com.Client
 
             lock (m_cache)
             {
-                if (!m_cache.TryGetValue(itemId, out element))
+                if (!m_cache.TryGetValue(itemId, out element) || element.ItemId == null)
                 {
                     element = null;
                 }
