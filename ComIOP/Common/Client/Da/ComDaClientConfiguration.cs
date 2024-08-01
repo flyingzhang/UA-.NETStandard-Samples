@@ -76,11 +76,52 @@ namespace Opc.Ua.Com.Client
         {
             get { return m_browseToNotSupported; }
             set { m_browseToNotSupported = value; }
-        }       
+        }
+        [DataMember(Order = 3)]
+        public string GroupPrefix
+        {
+            get
+            {
+                return m_groupPrefix;
+            }
+
+            set
+            {
+                if (String.IsNullOrEmpty(value))
+                {
+                    m_groupPrefix = String.Empty;
+                    return;
+                }
+
+                m_groupPrefix = value.Trim();
+            }
+        }
+        [DataMember(Order = 4)]
+        public string ItemSeparator
+        {
+            get
+            {
+                return m_itemSeparator;
+            }
+
+            set
+            {
+                if (String.IsNullOrEmpty(value))
+                {
+                    m_itemSeparator = String.Empty;
+                    return;
+                }
+
+                m_itemSeparator = value.Trim();
+            }
+        }
+
         #endregion
 
         #region Private Members
         private bool m_browseToNotSupported;
+        private string m_groupPrefix;
+        private string m_itemSeparator;
         #endregion
     }
 }

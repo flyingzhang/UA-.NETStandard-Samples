@@ -72,7 +72,7 @@ namespace Opc.Ua.Com.Client
             // set the default parser if none provided.
             if (configuration.ItemIdParser == null)
             {
-                configuration.ItemIdParser = new ComItemIdParser();
+                configuration.ItemIdParser = new ComDaItemIdParser();
             }
 
             // create the list of subscriptions.

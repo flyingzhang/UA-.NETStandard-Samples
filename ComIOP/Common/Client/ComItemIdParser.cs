@@ -99,9 +99,75 @@ namespace Opc.Ua.Com.Client
                     return true;
                 }
             }
-
             return false;
         }
         #endregion
     }
+
+    /// <summary>
+    /// a patched item id parser that uses the settings in the configuration support a special PATCH
+    /// </summary>
+    public class ComDaItemIdParser : ComItemIdParser, IItemIdParser
+    {
+        #region IItemIdParser Members
+        /// <summary>
+        /// Parses the specified item id.
+        /// </summary>
+        /// <param name="server">The COM server that provided the item id.</param>
+        /// <param name="configuration">The COM wrapper configuration.</param>
+        /// <param name="itemId">The item id to parse.</param>
+        /// <param name="browseName">The name of the item.</param>
+        /// <returns>True if the item id could be parsed.</returns>
+        public new bool Parse(ComObject server, ComClientConfiguration configuration, string itemId, out string browseName)
+        {
+            if (base.Parse(server, configuration, itemId, out browseName))
+            {
+                return true;
+            }
+            ComDaClientConfiguration dac = (ComDaClientConfiguration)configuration;
+
+            if (dac != null && itemId != null)
+            {
+                // This is a PATCH rather than a soluation
+                // Here we suppose any Items categoried into Group & Single Item.
+                // Group Items should start with GroupPrefix and not contain ItemSeparator
+                // Single Items can be either:
+                //     a) not started with GroupPrefix
+                //     b) started with GroupPrefix and contains ItemSeparator.
+                // When there is no explicit group prefix, this patch not working.
+                if (dac.GroupPrefix.Length > 0)
+                {
+                    if (itemId.StartsWith(dac.GroupPrefix))
+                    {
+                        if (dac.ItemSeparator.Length > 0)
+                        {
+                            int lastPos = itemId.LastIndexOf(dac.ItemSeparator);
+                            if (lastPos >= 0)
+                            {
+                                browseName = itemId.Substring(lastPos + 1);
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                    else
+                    {
+                        if (dac.ItemSeparator.Length > 0)
+                        {
+                            browseName = itemId.Substring(itemId.LastIndexOf(dac.ItemSeparator) + 1);
+                        }
+                        else
+                        {
+                            browseName = itemId;
+                        }
+                        return true;
+                        
+                    }
+                }
+            }
+            return false;
+        }
+        #endregion
+    }
+
 }
